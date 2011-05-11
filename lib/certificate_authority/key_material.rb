@@ -25,7 +25,8 @@ module CertificateAuthority
     attr_accessor :private_key
     attr_accessor :public_key
     
-    def initialize
+    def initialize(private_key = nil,public_key = nil)
+      load_keys private_key public_key if private_key && public_key
     end
     
     validates_each :private_key do |record, attr, value|
@@ -43,13 +44,24 @@ module CertificateAuthority
       true
     end
     
-    def generate_key(modulus_bits=1024)
+    def generate_key(modulus_bits=4096)
       self.keypair = OpenSSL::PKey::RSA.new(modulus_bits)
       self.private_key = keypair
       self.public_key = keypair.public_key
       self.keypair
     end
+
+    def save_keys(file,password)
+      File.open(file, 'w') {|f| f.write(self.keypair.to_pem(OpenSSL::Cipher.new("AES-256-CBC"),password)) }
+    end
     
+    def load_keys(file,password)
+      self.keypair = OpenSSL::PKey::RSA.new(File.read(file), password)
+      self.private_key = keypair 
+      self.public_key = keypair.public_key
+      self.keypair
+    end
+
     def private_key
       @private_key
     end

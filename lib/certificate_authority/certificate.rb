@@ -29,7 +29,7 @@ module CertificateAuthority
       end
     end
     
-    def initialize
+    def initialize 
       self.distinguished_name = DistinguishedName.new
       self.serial_number = SerialNumber.new
       self.key_material = MemoryKeyMaterial.new
@@ -38,8 +38,7 @@ module CertificateAuthority
       self.parent = self
       self.extensions = load_extensions()
       
-      self.signing_entity = false
-      
+      self.signing_entity = false      
     end
     
     def sign!(signing_profile={})
@@ -174,6 +173,17 @@ module CertificateAuthority
       end
       config
     end
+
+    public
+    def save_to_json file
+      temp_hash = {}
+      temp_hash["distinguished_name"]  = self.distinguished_name.common_name
+      temp_hash["serial_number"] = self.serial_number.number
+      temp_hash["not_before"] = self.not_before
+      temp_hash["not_after"] = self.not_after
+      temp_hash["extensions"] = self.extensions
+      return temp_hash.to_json
+    end
       
-  end
+  end    
 end
