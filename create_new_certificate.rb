@@ -5,6 +5,7 @@ require 'rubygems'
 require 'certificate_authority'
 require 'json'
 require 'time'
+require 'highline/import'
 
 SECRET_KEYS_PATH = "./secrets/"
 def key_exists?(key_name)
@@ -49,6 +50,11 @@ def generate_new_certificate (subject, parent, serial)
   temp_cert
 end
 
+def get_password(prompt="Enter Password")
+   ask(prompt) {|q| q.echo = false}
+end
+
+
 if __FILE__ == $0
   begin
     # puts "Please the key you wish to sign with (root, IT, etc):"
@@ -57,8 +63,7 @@ if __FILE__ == $0
     key_exists? key_name
     puts "Please enter the certificate Common Name (CN):"
     subject = gets.gsub(/\n/,"")
-    puts "Password for #{key_name} : " 
-    password = gets.gsub(/\n/,"")
+    password = get_password "Password for #{key_name}: "
   rescue Exception => message
     puts "Error: #{message}"
   end
