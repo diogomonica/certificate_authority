@@ -55,14 +55,14 @@ describe CertificateAuthority::MemoryKeyMaterial do
       @key_material_in_hardware.is_in_hardware?.should be_true
     end
     
-    it "should return a Pkey ref if the private key is requested", :pkcs11 => true do
-      @key_material_in_hardware.private_key.class.should == OpenSSL::PKey::RSA
-    end
+    # it "should return a Pkey ref if the private key is requested", :pkcs11 => true do
+    #   @key_material_in_hardware.private_key.class.should == OpenSSL::PKey::RSA
+    # end
     
-    it "should return a Pkey ref if the private key is requested", :pkcs11 => true do
-      @key_material_in_hardware.public_key.class.should == OpenSSL::PKey::RSA
-    end
-    
+    # it "should return a Pkey ref if the private key is requested", :pkcs11 => true do
+    #   @key_material_in_hardware.public_key.class.should == OpenSSL::PKey::RSA
+    # end
+    # 
     it "should accept an ID for on-token objects", :pkcs11 => true do
       @key_material_in_hardware.respond_to?(:token_id).should be_true
     end
